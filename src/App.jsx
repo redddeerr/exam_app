@@ -11,14 +11,16 @@ import './index.css';
 import { MenuOutlined } from '@ant-design/icons';
 import { Desktop, Mobile, Tablet } from './responsive';
 import { useState } from "react";
+import { useMediaQuery } from 'react-responsive';
 
 
 const { Header, Content, Footer} = Layout
 
 export const App = () => {
-    const { isLoggedIn, logout } = useAuth(); 
+  const { isLoggedIn, logout } = useAuth(); 
   const navigate = useNavigate();
-   const [drawerVisible, setDrawerVisible] = useState(false); 
+  const [drawerVisible, setDrawerVisible] = useState(false); 
+  const isMobile = useMediaQuery({ maxWidth: 767 }); 
 
   const handleLogout = () => {
     logout(); 
@@ -52,7 +54,10 @@ export const App = () => {
         </>
       )}
     </Menu>
+    
   );
+
+  const contentPadding = isMobile ? '0 10px' : '0 50px';
 
     return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -70,7 +75,7 @@ export const App = () => {
               </Button>
             ) : (
               <Button type="primary">
-                <Link to="/login" style={{ color: 'white', textDecoration: 'none' }}>Войти</Link>
+                <Link to="/login" style={{ color: 'white'}}>Войти</Link>
               </Button>
             )}
           </div>
@@ -92,14 +97,14 @@ export const App = () => {
               </Button>
             ) : (
               <Button type="primary" style={{ width: '100%', marginTop: '20px' }}>
-                <Link to="/login" style={{ color: 'white', textDecoration: 'none' }} onClick={onCloseDrawer}>Войти</Link>
+                <Link to="/login" style={{ color: 'white'}} onClick={onCloseDrawer}>Войти</Link>
               </Button>
             )}
           </Drawer>
         </Mobile>
       </Header>
 
-        <Content style={{ padding: '0 50px', marginTop: 64}}> 
+        <Content style={{ marginTop: 64 }}> 
         <div style={{ background: '#fff', padding: 24, minHeight: 'calc(100vh - 170px)' }}> 
             <Routes>
                 <Route path="/" element={<Home />} />
