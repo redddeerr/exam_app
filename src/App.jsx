@@ -9,7 +9,7 @@ import { Button, Drawer, Layout, Menu } from "antd";
 import { useAuth } from './components/AuthContext';
 import './index.css';
 import { MenuOutlined } from '@ant-design/icons';
-import { Desktop, Mobile, Tablet } from './responsive';
+import { Desktop, Mobile } from './responsive';
 import { useState } from "react";
 import { useMediaQuery } from 'react-responsive';
 
@@ -19,8 +19,8 @@ const { Header, Content, Footer} = Layout
 export const App = () => {
   const { isLoggedIn, logout } = useAuth(); 
   const navigate = useNavigate();
-  const [drawerVisible, setDrawerVisible] = useState(false); 
   const isMobile = useMediaQuery({ maxWidth: 767 }); 
+  const [drawerVisible, setDrawerVisible] = useState(false); 
 
   const handleLogout = () => {
     logout(); 
@@ -35,8 +35,8 @@ export const App = () => {
     setDrawerVisible(false);
   };
 
-  const renderMenuItems = (mode) => (
-    <Menu theme="dark" mode={mode} defaultSelectedKeys={['1']}>
+  const renderMenuItems = (mode, menuTheme) => (
+    <Menu theme={menuTheme} mode={mode} defaultSelectedKeys={['1']}>
       <Menu.Item key="home" onClick={onCloseDrawer}>
         <Link to="/">Главная</Link>
       </Menu.Item>
@@ -63,12 +63,12 @@ export const App = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px' }}>
         <div className="logo" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>
-          <Link to="/" style={{ color: 'blue', textDecoration: 'none' }}>Диспансеризация Онлайн</Link>
+          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Диспансеризация Онлайн</Link>
         </div>
 
         <Desktop>
-          {renderMenuItems("horizontal")}
-          <div>
+           {renderMenuItems("horizontal", "dark")}
+          <div style={{ marginLeft: 'auto'}}>
             {isLoggedIn ? (
               <Button type="primary" danger onClick={handleLogout}>
                 Выйти
@@ -90,7 +90,7 @@ export const App = () => {
             open={drawerVisible}
             style={{ padding: 0 }}
           >
-            {renderMenuItems("vertical")}
+            {renderMenuItems("vertical", "light")}
             {isLoggedIn ? (
               <Button type="primary" danger onClick={handleLogout} style={{ width: '100%', marginTop: '20px' }}>
                 Выйти
