@@ -14,7 +14,7 @@ function Appointment() {
  const onFinish = (values) => {
     const { date, time, specialty } = values;
 
-    const formattedDate = date ? date.format('DD-MM-YYYY') : '';
+    const formattedDate = date ? date.format('YYYY-MM-DD') : '';
     const formattedTime = time ? time.format('HH:mm') : '';
 
     const newAppointment = {

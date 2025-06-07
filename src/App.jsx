@@ -5,57 +5,99 @@ import Appointment from './pages/appointment';
 import MyAppointments from './pages/myAppointments';
 import Results from './pages/results';
 import ProtectedRoute from './components/ProtectedRoute';
-import { Button, Layout, Menu } from "antd";
+import { Button, Drawer, Layout, Menu } from "antd";
 import { useAuth } from './components/AuthContext';
 import './index.css';
+import { MenuOutlined } from '@ant-design/icons';
+import { Desktop, Mobile, Tablet } from './responsive';
+import { useState } from "react";
+
 
 const { Header, Content, Footer} = Layout
 
 export const App = () => {
     const { isLoggedIn, logout } = useAuth(); 
   const navigate = useNavigate();
+   const [drawerVisible, setDrawerVisible] = useState(false); 
 
   const handleLogout = () => {
     logout(); 
     navigate('/login'); 
   };
 
+  const showDrawer = () => {
+    setDrawerVisible(true);
+  };
+
+  const onCloseDrawer = () => {
+    setDrawerVisible(false);
+  };
+
+  const renderMenuItems = (mode) => (
+    <Menu theme="dark" mode={mode} defaultSelectedKeys={['1']}>
+      <Menu.Item key="home" onClick={onCloseDrawer}>
+        <Link to="/">Главная</Link>
+      </Menu.Item>
+      {isLoggedIn && (
+        <>
+          <Menu.Item key="my-appointments" onClick={onCloseDrawer}>
+            <Link to="/my-appointments">Мои записи</Link>
+          </Menu.Item>
+          <Menu.Item key="appointment" onClick={onCloseDrawer}>
+            <Link to="/appointment">Записаться</Link>
+          </Menu.Item>
+          <Menu.Item key="results" onClick={onCloseDrawer}>
+            <Link to="/results">Результаты</Link>
+          </Menu.Item>
+        </>
+      )}
+    </Menu>
+  );
+
     return (
     <Layout style={{ minHeight: '100vh' }}>
-        <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px' }}> 
-                <div className="logo" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>
-                 <Link to="/" >Диспансеризация Онлайн</Link>
-                </div>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} style={{ flex: 1, minWidth: 0 }}>
-                <Menu.Item key="home">
-                    <Link to="/">Главная</Link>
-                </Menu.Item>
-          {isLoggedIn && ( 
-            <>
-              <Menu.Item key="my-appointments">
-                <Link to="/my-appointments">Мои записи</Link>
-              </Menu.Item>
-              <><Menu.Item key="appointment">
-                <Link to="/appointment">Записаться</Link>
-              </Menu.Item></>
-              <Menu.Item key="results">
-                <Link to="/results">Результаты</Link>
-              </Menu.Item>
-            </> 
-          )}
-        </Menu>
-        <div>
-          {isLoggedIn ? (
-            <Button type="primary" danger onClick={handleLogout}>
-              Выйти
-            </Button>
-          ) : (
-            <Button type="primary">
-              <Link to="/login" style={{ color: 'white'}}>Войти</Link>
-            </Button>
-          )}
+      <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px' }}>
+        <div className="logo" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>
+          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Мед-Приложение</Link>
         </div>
-        </Header>
+
+        <Desktop>
+          {renderMenuItems("horizontal")}
+          <div>
+            {isLoggedIn ? (
+              <Button type="primary" danger onClick={handleLogout}>
+                Выйти
+              </Button>
+            ) : (
+              <Button type="primary">
+                <Link to="/login" style={{ color: 'white', textDecoration: 'none' }}>Войти</Link>
+              </Button>
+            )}
+          </div>
+        </Desktop>
+
+        <Mobile>
+          <Button type="primary" icon={<MenuOutlined />} onClick={showDrawer} />
+          <Drawer
+            title="Меню"
+            placement="right"
+            onClose={onCloseDrawer}
+            open={drawerVisible}
+            style={{ padding: 0 }}
+          >
+            {renderMenuItems("vertical")}
+            {isLoggedIn ? (
+              <Button type="primary" danger onClick={handleLogout} style={{ width: '100%', marginTop: '20px' }}>
+                Выйти
+              </Button>
+            ) : (
+              <Button type="primary" style={{ width: '100%', marginTop: '20px' }}>
+                <Link to="/login" style={{ color: 'white', textDecoration: 'none' }} onClick={onCloseDrawer}>Войти</Link>
+              </Button>
+            )}
+          </Drawer>
+        </Mobile>
+      </Header>
 
         <Content style={{ padding: '0 50px', marginTop: 64}}> 
         <div style={{ background: '#fff', padding: 24, minHeight: 'calc(100vh - 170px)' }}> 
