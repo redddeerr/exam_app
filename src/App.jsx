@@ -58,7 +58,7 @@ export const App = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px' }}>
         <div className="logo" style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>
-          <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Мед-Приложение</Link>
+          <Link to="/" style={{ color: 'blue', textDecoration: 'none' }}>Диспансеризация Онлайн</Link>
         </div>
 
         <Desktop>
